@@ -31,7 +31,7 @@ $0 ~ blocks {current_block = $0}
 
 END {
 	if(task_name && batch)
-		printf("#%s\n%s\n", task_name, batch) > task_file
+		printf("#%s\n%s\n", task_name, batch) > task_file;
 }
 
 
@@ -39,7 +39,7 @@ END {
 ### Functions ###
 
 function addNewBlockSeparator(blck_name){
-	blocks = (blocks (blocks ? "|" : "") "\\[" blck_name "\\]")
+	blocks = (blocks (blocks ? "|" : "") "\\[" blck_name "\\]");
 }
 
 function getTaskName(sbj){

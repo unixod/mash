@@ -1,10 +1,10 @@
 #!/bin/bash
 
 ### CONFIG ###
-# TASKS_DIR	- директория куда будут помещаться вновь поступившие таски
+# TASKS_DIR	- dir where fetched tasks will be located
 config_file="$HOME/.dtom.conf"
 
-BIN_DIR=$PWD/${0%/*}
+BIN_DIR=$PWD/${0%/*};
 source "$BIN_DIR/driver.sh.functions"
 
 if [ -f "$config_file" ]; then

@@ -3,7 +3,7 @@
 # Mail Parser - parses mail data to subject and body to stdout
 
 BEGIN {
-	FS = ": "
+	FS = ": ";
 	head = 1;
 	multipart_boundary = 0;
 	subject = "";
@@ -14,7 +14,7 @@ BEGIN {
 !head && (!multipart_boundary || ($0 !~ multipart_boundary)){
 	# non empty lines are output
 	# sybject must be set
-	if(subject && $0) print
+	if(subject && $0) print;
 }
 
 # Body separator
@@ -24,7 +24,7 @@ BEGIN {
 
 # Multipart separator (optional)
 multipart_boundary && ($0 ~ multipart_boundary){
-	if(!--head) exit
+	if(!--head) exit;
 }
 
 # Headers
@@ -45,8 +45,8 @@ multipart_boundary && ($0 ~ multipart_boundary){
 		} else {
 			msg = "unexpected EOF or error";
 			msg = (msg ": " ERRNO);
-			print msg > "/dev/stderr"
-			exit
+			print msg > "/dev/stderr";
+			exit;
 		}
 	}
 }
