@@ -1,0 +1,32 @@
+#!/bin/bash
+
+function read_config(){
+# usage: read_config $cofig_file_path
+#
+# Reading config from $config_file_path, if $config_file_path is unclean - cleanes it to tmp/file_name
+# If config file does not exist - return "not found" string
+
+	local config_file=$1				# full path to config
+	local config_tmpfile="/tmp/${config_file##*/}"	# used if $config_file is unclean
+
+	# http://wiki.bash-hackers.org/howto/conffiletsom
+	if egrep -q -v '^#|^[^ ]*=[^;]*' "$config_file" ; then
+		# Config file is unclean, cleaning it to temp file
+		egrep '^#|^[^ ]*=[^;&]*' "$config_file" > "$config_tmpfile"
+		config_file=$config_tmpfile
+	fi
+	source "$config_file"
+}
+
+function validate_vars(){
+	tmp=${TASKS_DIR:?variable must be set in $1}
+}
+
+
+function fetch_tasks(){
+# usage: fetch_tasks
+#
+# Fetches mails and extract tasks from it to current work directory
+
+	fetchmail -k -m "$BIN_DIR/mail_parser.awk | $BIN_DIR/task_gen.awk"
+}

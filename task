@@ -1,0 +1,36 @@
+#!/bin/bash
+
+TASK_FILE=$1
+LCK_FILE="${0%/*}/task.$$"
+
+function run_task(){
+	echo aaa${1}aaa
+}
+
+# Task running (lock_file && pid exist)
+# Task stopded (lockfile exist)
+# Nobody runnyng
+
+# lockfile name format: task_id.pid
+function getStatus(){
+	local lock_files=$(ls -1 | grep -i '[0-9a-f]\{32\}\.[0-9]*$');
+
+	#if exist only one lockfile
+	if [ $(echo $lock_files | wc -l) -eq 1 ]; then
+		local task_id=$(echo $lock_files | cut -f1 -d.)		
+		local pid=$(echo $lock_files | cut -f2 -d.)
+
+		# if task is not running (stoped previously)
+		if [ -z $(ps -e | grep "$pid.*$task_id") ]; then
+			rm $lock_files
+		fi
+	fi
+}
+
+getStatus
+
+#if [ -f "$TASK_FILE" ]; then
+#	touch "$LCK_FILE"
+#	run_task "$TASK_FILE"
+#	rm -rf "$LCK_FILE"
+#fi

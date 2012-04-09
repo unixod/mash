@@ -1,41 +1,40 @@
 #!/usr/bin/awk -f
 
-# Task-mail Delivery Agent
+# Mail Parser - parses mail data to subject and body to stdout
 
 BEGIN {
 	FS = ": "
 	head = 1;
 	multipart_boundary = 0;
-	
-	### CONFIGURATION ###
-	subject_pattern = "task: (.+)";
+	subject = "";
 }
 
 
-#Body
+# Body
 !head && (!multipart_boundary || ($0 !~ multipart_boundary)){
-	if($0) print
+	# non empty lines are output
+	# sybject must be set
+	if(subject && $0) print
 }
 
-#Body separator
+# Body separator
 (head == 1) && $0 == ""{
 	head = 0;
 }
 
-#Multipart separator (optional)
+# Multipart separator (optional)
 multipart_boundary && ($0 ~ multipart_boundary){
 	if(!--head) exit
 }
 
-#Headers
+# Headers
 /[^ ]+: [^ ]+/ && head{
 	if($1 == "Subject"){
-		#extracting subject value
-		sbj = $0;
-		sub(/[^:]+: /, "", sbj);
+		# extracting subject value
+		subject = $0;
+		sub(/[^:]+: /, "", subject);
 
-		if(task_id = getTaskName(sbj)) print task_id;
-		else exit;
+		print subject;
 	} else if($1 == "Content-Type" &&
 		  $2 == "multipart/alternative;"){
 		if(getline > 0){
@@ -55,7 +54,14 @@ multipart_boundary && ($0 ~ multipart_boundary){
 
 ### Functions ###
 
-function getTaskName(sbj){
-	return match(sbj, subject_pattern, arr) ? arr[1] : "";
-}
+#function getTaskName(sbj){
+#	return match(sbj, subject_pattern, arr) ? arr[1] : "";
+#}
+
+#function md5_sum(val){
+#	command = ("echo \"" val "\" | md5sum | sed 's/\\s.*//'");
+#	command | getline ret;
+#	close(command);
+#	return ret;
+#}
 
