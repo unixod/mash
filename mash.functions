@@ -20,6 +20,7 @@ function read_config(){
 
 function validate_vars(){
 	tmp=${TASKS_DIR:?variable must be set in $1}
+	tmp=${COMPLETE_TASKS_DIR:?variable must be set in $1}
 }
 
 
