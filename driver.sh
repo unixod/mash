@@ -6,16 +6,21 @@ config_file="$HOME/.dtom.conf"
 
 BIN_DIR=$PWD/${0%/*};
 source "$BIN_DIR/driver.sh.functions"
+source "$BIN_DIR/task_loader.sh"
 
 if [ -f "$config_file" ]; then
 	read_config "$config_file"
 
 	validate_vars "$config_file"
 
-	(cd "$TASKS_DIR" && fetch_tasks)
+	(
+		cd "$TASKS_DIR" &&
+		fetch_tasks &&
+		[ $(ls -l | grep -c '^-') -gt 0 ] &&	# if there is tasks
+		start_tasks
+	)
 
 #	[ (ls -l | awk '!/^d/{i++;} END{print i}') -gt 0 ]
-	[ $(ls -l | grep -v '^d' | wc -l) -gt 0 ]
 else
 	echo $config_file does not exist
 fi

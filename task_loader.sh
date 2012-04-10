@@ -1,8 +1,5 @@
 #!/bin/bash
 
-TASK_FILE=$1
-LCK_FILE="${0%/*}/task.$$"
-
 function run_task(){
 	local task_id=$1
 	touch $task_id.$$
@@ -10,10 +7,10 @@ function run_task(){
 	rm $task_id.$$
 }
 
-function start(){
+function start_tasks(){
 	# lockfile name format: task_id.pid
 	lock_files=$(ls -1 | grep -i '[0-9a-f]\{32\}\.[0-9]*$')
-	lock_files_cnt=$(ls -1 | grep -i '[0-9a-f]\{32\}\.[0-9]*$' | wc -l)
+	lock_files_cnt=$(ls -1 | grep -ci '[0-9a-f]\{32\}\.[0-9]*$')
 
 	#if exist only one lockfile
 	case $lock_files_cnt in
@@ -37,4 +34,3 @@ function start(){
 	esac
 }
 
-start
