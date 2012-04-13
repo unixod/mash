@@ -1,6 +1,6 @@
 #!/usr/bin/awk -f
 
-# Mail Parser - parses mail data to subject and body to stdout
+# Mail Parser - reads and parses mail data from stdin to subject and body to stdout
 
 BEGIN {
 	FS = ": ";
@@ -51,17 +51,4 @@ multipart_boundary && ($0 ~ multipart_boundary){
 	}
 }
 
-
-### Functions ###
-
-#function getTaskName(sbj){
-#	return match(sbj, subject_pattern, arr) ? arr[1] : "";
-#}
-
-#function md5_sum(val){
-#	command = ("echo \"" val "\" | md5sum | sed 's/\\s.*//'");
-#	command | getline ret;
-#	close(command);
-#	return ret;
-#}
 

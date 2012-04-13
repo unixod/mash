@@ -10,15 +10,18 @@ function read_config(){
 	local config_tmpfile="/tmp/${config_file##*/}"	# used if $config_file is unclean
 
 	# http://wiki.bash-hackers.org/howto/conffiletsom
-	if egrep -q -v '^#|^[^ ]*=[^;]*' "$config_file" ; then
+	if grep -Eqv '^#|^[^ ]*=[^;]*' "$config_file" ; then
 		# Config file is unclean, cleaning it to temp file
-		egrep '^#|^[^ ]*=[^;&]*' "$config_file" > "$config_tmpfile"
+		grep -E '^#|^[^ ]*=[^;&]*' "$config_file" > "$config_tmpfile"
 		config_file=$config_tmpfile
 	fi
 	source "$config_file"
 }
 
 function validate_vars(){
+# usage: validate_vars
+#
+# Validate configuration variables
 	tmp=${TASKS_DIR:?variable must be set in $1}
 	tmp=${COMPLETE_TASKS_DIR:?variable must be set in $1}
 }
@@ -27,7 +30,7 @@ function validate_vars(){
 function fetch_tasks(){
 # usage: fetch_tasks
 #
-# Fetches mails and extract tasks from it to current work directory
+# Fetches mails and extract tasks from them to current work directory
 
 	fetchmail -k -m "$BIN_DIR/mail_parser.awk | $BIN_DIR/task_gen.awk"
 }

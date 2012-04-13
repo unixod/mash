@@ -1,7 +1,7 @@
 #!/usr/bin/awk -f
 
-# Task File Generator - parses stdinput and generate task-file
-# First line must be task name
+# Task File Generator - parses stdinput and generate task-file with name - md5 sum of task name
+# First line (in stdin) must be task name
 
 BEGIN{
 	blocks = "";
