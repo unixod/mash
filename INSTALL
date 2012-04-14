@@ -1,0 +1,14 @@
+### Requirements ###
+
+bash, gawk, fetchmail
+
+### Installing ###
+
+1. Make sure that fetchmail is configured (POP3, no keep, etc).
+2. Create configuration file $HOME/.mash.conf
+   in which must be defined the following variables:
+	TASKS_DIR           - location where the fetched tasks will be placed
+	COMPLETED_TASKS_DIR - location where the completed tasks will be placed
+	ABORTED_TASKS_DIR   - location where the aborted tasks will be placed
+3. Add ./mash to crontab
+

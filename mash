@@ -1,29 +1,56 @@
 #!/bin/bash
+#
+# MaSh - eMail Shell
+# Copyright (C) 2012, Eldar Zakirov <unixod@gmail.com>
+#
+# This file is part of MaSh.
+#
+# MaSh is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# MaSh is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+#
+#  mash - MaSh main executable
+#
+#  Configuration file must define the following variables:
+#                 TASKS_DIR           - location where the fetched tasks will
+#                                       be placed
+#                 COMPLETED_TASKS_DIR - location where the completed tasks will
+#                                       be placed
+#                 ABORTED_TASKS_DIR   - location where the aborted tasks will
+#                                       be placed
 
-### CONFIG ###
-# TASKS_DIR		- dir where fetched tasks will be located
-# COMPLETE_TASKS_DIR	- dir where finished tasks will be located
 
-config_file="$HOME/.mash.conf"
+### CONFIGURATION ###
+
+CONFIG_FILE="$HOME/.mash.conf"
+
+#####################
 
 BIN_DIR=$PWD/${0%/*};
 source "$BIN_DIR/mash.functions"
 source "$BIN_DIR/task_loader.sh"
 
-if [ -f "$config_file" ]; then
-	read_config "$config_file"
+if [ -f "$CONFIG_FILE" ]; then
+	read_config "$CONFIG_FILE"
 
-	validate_vars "$config_file"
+	validate_vars "$CONFIG_FILE"
 
 	(
-		cd "$TASKS_DIR" &&
-		fetch_tasks &&
+		cd "$TASKS_DIR" && fetch_tasks
 		[ $(ls -1 --file-type | grep -ciE '^[0-9a-f]{32}$') -gt 0 ] &&	# if there is tasks
-		start_tasks $COMPLETE_TASKS_DIR
+		start_tasks $COMPLETED_TASKS_DIR $ABORTED_TASKS_DIR
 	)
 
 else
-	echo $config_file does not exist
+	echo $CONFIG_FILE does not exist
 fi
 
-#fetch_tasks "$TASKS_DIR"

@@ -1,4 +1,25 @@
 #!/bin/bash
+#
+# MaSh - eMail Shell
+# Copyright (C) 2012, Eldar Zakirov <unixod@gmail.com>
+#
+# This file is part of MaSh.
+#
+# MaSh is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# MaSh is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+#
+#  mash.functions - helper routines module
+
 
 function read_config(){
 # usage: read_config $cofig_file_path
@@ -23,7 +44,8 @@ function validate_vars(){
 #
 # Validate configuration variables
 	tmp=${TASKS_DIR:?variable must be set in $1}
-	tmp=${COMPLETE_TASKS_DIR:?variable must be set in $1}
+	tmp=${COMPLETED_TASKS_DIR:?variable must be set in $1}
+	tmp=${ABORTED_TASKS_DIR:?variable must be set in $1}
 }
 
 
@@ -32,5 +54,5 @@ function fetch_tasks(){
 #
 # Fetches mails and extract tasks from them to current work directory
 
-	fetchmail -k -m "$BIN_DIR/mail_parser.awk | $BIN_DIR/task_gen.awk"
+	fetchmail -m "$BIN_DIR/mail_parser.awk | $BIN_DIR/task_gen.awk"
 }
