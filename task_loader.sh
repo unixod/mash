@@ -40,7 +40,7 @@ function run_task(){
 }
 
 function start_tasks(){
-# usage: start_tasks $completed_tasks_dir
+# usage: start_tasks $completed_tasks_dir $aborted_tasks_dir
 #
 # Execute task-file. When task will be completed, it will be moved to $completed_tasks_dir
 
@@ -49,7 +49,7 @@ function start_tasks(){
 	local TASK_ID_PTRN='[0-9a-f]{32}'
 
 	# lockfile name format: task_id.pid
-	local lock_file=$(ls -1rt | grep -iE ${TASK_ID_PTRN}'\.[0-9]+$' | line)
+	local lock_file=$(ls -1rt | grep -iE ${TASK_ID_PTRN}'\.[0-9]+$' | head -n 1)
 	local task_id
 
 	if [[ -n $lock_file ]]; then
@@ -65,7 +65,7 @@ function start_tasks(){
 	fi
 
 	[[ ! -f $task_id ]] &&
-		task_id=$(ls -1rt --file-type | grep -iE '^'${TASK_ID_PTRN}'$' | line)			# oldest task
+		task_id=$(ls -1rt --file-type | grep -iE '^'${TASK_ID_PTRN}'$' | head -n 1)			# oldest task
 
 	[[ -f $task_id ]] &&
 		run_task $task_id $completed_tasks_dir $aborted_tasks_dir
